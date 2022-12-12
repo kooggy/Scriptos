@@ -1,9 +1,22 @@
 local autoDunk = false
 local autoHatch = false
+local autoRebirth = false 
 local eggs = {}
 local selectedEgg = {}
 for i = 1, #game:GetService("Workspace").Eggs:GetChildren() do
     table.insert(eggs, i)
+end
+
+local function rebirth()
+    spawn(function()
+        while autoRebirth == true do
+            task.wait()
+            game:GetService("ReplicatedStorage").Remotes.RequestRebirth:FireServer()
+            if not autoRebirth then
+                break
+            end
+        end
+    end)
 end
 
 local function hatch()
@@ -17,6 +30,9 @@ local function hatch()
                 }
 
                 game:GetService("ReplicatedStorage").Remotes.BuyEgg:InvokeServer(unpack(args))
+                if not autoHatch then
+                    break
+                end
             end
         end
     )
@@ -54,6 +70,17 @@ tab:Toggle(
         autoDunk = t
         if autoDunk then
             dunk()
+        end
+    end
+)
+
+tab:Toggle(
+    "Auto Rebirth",
+    false,
+    function(t)
+        autoRebirth = t
+        if autoRebirth then
+            rebirth()
         end
     end
 )
