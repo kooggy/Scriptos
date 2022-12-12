@@ -1,3 +1,8 @@
+if game.CoreGui:FindFirstChild("ui") then
+    game.CoreGui["ui"]:Destroy()
+end
+
+
 local autoDunk = false
 local autoHatch = false
 local autoRebirth = false 
